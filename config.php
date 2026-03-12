@@ -36,9 +36,15 @@ define('ADMIN_EMAILS', 'admin@ayitico.com');
 // Categories - matching database
 define('CATEGORIES', [
     'Solar',
-    'Phones', 
+    'Phones',
     'Electronics',
     'Survival',
-    'Essentials'
+    'Essentials',
+    'Home & Garden',
+    'Clothing & Fashion',
+    'Sports & Outdoors',
+    'Food & Grocery',
+    'Tools',
+    'Services & Digital'
 ]);
 ?>

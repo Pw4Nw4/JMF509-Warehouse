@@ -62,45 +62,23 @@ class Database {
 
     public function fetchProducts($limit = null, $category = null) {
         try {
-            // Check if using old schema (category column) or new schema (category_id with join)
-            $hasCategoryColumn = false;
-            try {
-                $stmt = $this->pdo->query("SELECT category FROM products LIMIT 1");
-                $hasCategoryColumn = true;
-            } catch (Exception $e) {
-                $hasCategoryColumn = false;
+            // Your database has: id, name, price, category, description, image_url, rating, stock_quantity
+            $sql = "SELECT id, name, price, image_url as image, description, category, stock_quantity FROM products";
+            $params = [];
+            
+            if ($category && $category !== 'all') {
+                $sql .= " WHERE category = ?";
+                $params[] = $category;
             }
-
-            if ($hasCategoryColumn) {
-                $sql = "SELECT id, name, price, image, description, category, stock_quantity FROM products";
-                $params = [];
-                if ($category) {
-                    $sql .= " WHERE category = ?";
-                    $params[] = $category;
-                }
-                $sql .= " ORDER BY created_at DESC";
-                if ($limit) {
-                    $sql .= " LIMIT " . (int)$limit;
-                }
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute($params);
-            } else {
-                // New schema with category_id
-                $sql = "SELECT p.id, p.name, p.price, p.image_url as image, p.description, c.name as category, p.stock_quantity, p.created_at
-                        FROM products p
-                        LEFT JOIN categories c ON p.category_id = c.id";
-                $params = [];
-                if ($category) {
-                    $sql .= " WHERE c.name = ?";
-                    $params[] = $category;
-                }
-                $sql .= " ORDER BY p.created_at DESC";
-                if ($limit) {
-                    $sql .= " LIMIT " . (int)$limit;
-                }
-                $stmt = $this->pdo->prepare($sql);
-                $stmt->execute($params);
+            
+            $sql .= " ORDER BY id DESC";
+            
+            if ($limit) {
+                $sql .= " LIMIT " . (int)$limit;
             }
+            
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Error fetching products: " . $e->getMessage());

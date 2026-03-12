@@ -25,6 +25,9 @@ if ($featuredProducts === null && $pdo) {
         $featuredProducts = $db->fetchProducts(FEATURED_PRODUCTS_COUNT);
         if (DEBUG_MODE) {
             $debugInfo .= "Products found: " . count($featuredProducts) . "<br>";
+            if (count($featuredProducts) > 0) {
+                $debugInfo .= "First product: " . $featuredProducts[0]['name'] . "<br>";
+            }
         }
         if (!empty($featuredProducts) && CACHE_ENABLED) {
             SimpleCache::set($cacheKey, $featuredProducts, CACHE_TTL);
