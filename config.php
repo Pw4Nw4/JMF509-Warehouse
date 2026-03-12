@@ -2,7 +2,7 @@
 // AyitiCo - Haitian Marketplace Application Configuration
 define('APP_NAME', 'AyitiCo');
 define('APP_VERSION', '1.0');
-define('DEBUG_MODE', false);
+define('DEBUG_MODE', true);
 
 // Security headers
 header('X-Content-Type-Options: nosniff');

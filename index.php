@@ -7,17 +7,35 @@ require_once __DIR__ . '/Extras/Cache.php';
 
 $featuredProducts = [];
 $productsLoadError = null;
+$debugInfo = '';
+
+// Debug: show database status
+if (DEBUG_MODE) {
+    $debugInfo .= "PDO status: " . ($pdo ? "connected" : "NOT connected") . "<br>";
+}
+
 $cacheKey = 'featured_products';
 if (CACHE_ENABLED) {
     $featuredProducts = SimpleCache::get($cacheKey);
 }
+
 if ($featuredProducts === null && $pdo) {
-    $db = Database::getInstance();
-    $featuredProducts = $db->fetchProducts(FEATURED_PRODUCTS_COUNT);
-    if (!empty($featuredProducts) && CACHE_ENABLED) {
-        SimpleCache::set($cacheKey, $featuredProducts, CACHE_TTL);
+    try {
+        $db = Database::getInstance();
+        $featuredProducts = $db->fetchProducts(FEATURED_PRODUCTS_COUNT);
+        if (DEBUG_MODE) {
+            $debugInfo .= "Products found: " . count($featuredProducts) . "<br>";
+        }
+        if (!empty($featuredProducts) && CACHE_ENABLED) {
+            SimpleCache::set($cacheKey, $featuredProducts, CACHE_TTL);
+        }
+        if (empty($featuredProducts)) $productsLoadError = "No featured products available.";
+    } catch (Exception $e) {
+        $productsLoadError = "Error: " . $e->getMessage();
+        if (DEBUG_MODE) {
+            $debugInfo .= "Exception: " . $e->getMessage() . "<br>";
+        }
     }
-    if (empty($featuredProducts)) $productsLoadError = "No featured products available.";
 } elseif (!$pdo) {
     $productsLoadError = "Database connection not available.";
 }
@@ -32,6 +50,13 @@ if ($featuredProducts === null && $pdo) {
 </section>
 
 <main>
+  <?php if (DEBUG_MODE && $debugInfo): ?>
+    <div style="background: #eee; padding: 10px; margin-bottom: 20px; font-family: monospace; font-size: 12px;">
+      <strong>Debug Info:</strong><br>
+      <?php echo $debugInfo; ?>
+    </div>
+  <?php endif; ?>
+
   <?php if (!$login): ?>
     <p class="login-prompt">Please <a href="login.php">sign in</a> to shop and place orders.</p>
   <?php endif; ?>
