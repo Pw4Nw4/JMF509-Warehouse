@@ -1,13 +1,13 @@
 <?php
 $pageTitle = "JMF 509 Warehouse - Checkout";
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/Extras/header.php';
 require_once __DIR__ . '/Extras/database.php';
 require_once __DIR__ . '/Extras/Security.php';
 require_once __DIR__ . '/Extras/PaymentGateway.php';
 require_once __DIR__ . '/Extras/EmailService.php';
 
-if (!$login) {
+if (session_status() == PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
   header("Location: index.php");
   exit;
 }
@@ -34,6 +34,8 @@ if (empty($cartItems)) {
   header("Location: cart.php");
   exit;
 }
+
+require_once __DIR__ . '/Extras/header.php';
 
 $stripeEnabled = defined('STRIPE_ENABLED') && STRIPE_ENABLED;
 

@@ -1,14 +1,16 @@
 <?php
 $pageTitle = "JMF 509 Warehouse - Cart";
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/Extras/header.php';
 require_once __DIR__ . '/Extras/database.php';
-require_once __DIR__ . '/Extras/ErrorHandler.php';
 
-if (!$login) {
+if (session_status() == PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
   header("Location: index.php");
   exit;
 }
+
+require_once __DIR__ . '/Extras/header.php';
+require_once __DIR__ . '/Extras/ErrorHandler.php';
 
 $db = Database::getInstance();
 if (!$db->getPDO()) {

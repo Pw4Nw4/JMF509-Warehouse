@@ -1,16 +1,11 @@
 <?php
 $pageTitle = "JMF 509 Warehouse - Product";
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/Extras/header.php';
 require_once __DIR__ . '/Extras/database.php';
 
-if (!$login) {
+if (session_status() == PHP_SESSION_NONE) session_start();
+if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
   header("Location: index.php");
-  exit;
-}
-if ($pdo === null) {
-  echo "<main><div class='alert'>Database not available.</div></main>";
-  require_once __DIR__ . '/Extras/footer.php';
   exit;
 }
 
@@ -25,39 +20,48 @@ $reviews = [];
 $message = '';
 $messageClass = 'alert';
 
-try {
-  $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
-  $stmt->execute([$itemId]);
-  $product = $stmt->fetch(PDO::FETCH_ASSOC);
-  if ($product) {
-    $pageTitle = "JMF 509 - " . htmlspecialchars($product['name']);
-    $stmt = $pdo->prepare("SELECT r.*, u.username FROM reviews r LEFT JOIN users u ON r.user_email = u.email WHERE r.product_id = ? ORDER BY r.created_at DESC");
+if ($pdo !== null) {
+  try {
+    $stmt = $pdo->prepare("SELECT * FROM products WHERE id = ?");
     $stmt->execute([$itemId]);
-    $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($product) {
+      $pageTitle = "JMF 509 - " . htmlspecialchars($product['name']);
+      $stmt = $pdo->prepare("SELECT r.*, u.username FROM reviews r LEFT JOIN users u ON r.user_email = u.email WHERE r.product_id = ? ORDER BY r.created_at DESC");
+      $stmt->execute([$itemId]);
+      $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+  } catch (PDOException $e) {
+    $product = false;
+    $message = "Error loading product.";
   }
-} catch (PDOException $e) {
-  $product = false;
-  $message = "Error loading product.";
-}
 
-if ($product && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['review_submit_action'])) {
-  $reviewText = trim($_POST['review'] ?? '');
-  $rating = filter_input(INPUT_POST, 'rating', FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
-  if (empty($reviewText)) {
-    $message = "Please enter your review.";
-  } elseif (!$rating) {
-    $message = "Please select a rating 1–5.";
-  } else {
-    try {
-      $stmt = $pdo->prepare("INSERT INTO reviews (product_id, user_email, rating, comment, created_at) VALUES (?, ?, ?, ?, NOW())");
-      if ($stmt->execute([$itemId, $_SESSION['email'], $rating, $reviewText])) {
-        header("Location: description.php?item=" . $itemId . "&review=success#reviews-section");
-        exit;
+  if ($product && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['review_submit_action'])) {
+    $reviewText = trim($_POST['review'] ?? '');
+    $rating = filter_input(INPUT_POST, 'rating', FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 5]]);
+    if (empty($reviewText)) {
+      $message = "Please enter your review.";
+    } elseif (!$rating) {
+      $message = "Please select a rating 1–5.";
+    } else {
+      try {
+        $stmt = $pdo->prepare("INSERT INTO reviews (product_id, user_email, rating, comment, created_at) VALUES (?, ?, ?, ?, NOW())");
+        if ($stmt->execute([$itemId, $_SESSION['email'], $rating, $reviewText])) {
+          header("Location: description.php?item=" . $itemId . "&review=success#reviews-section");
+          exit;
+        }
+      } catch (PDOException $e) {
+        $message = "Could not save review.";
       }
-    } catch (PDOException $e) {
-      $message = "Could not save review.";
     }
   }
+}
+
+require_once __DIR__ . '/Extras/header.php';
+if ($pdo === null) {
+  echo "<main><div class='alert'>Database not available.</div></main>";
+  require_once __DIR__ . '/Extras/footer.php';
+  exit;
 }
 
 if (isset($_GET['review']) && $_GET['review'] === 'success') {

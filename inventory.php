@@ -1,15 +1,17 @@
 <?php
 $pageTitle = "JMF 509 Warehouse - Inventory";
 require_once __DIR__ . '/config.php';
-require_once __DIR__ . '/Extras/header.php';
 require_once __DIR__ . '/Extras/database.php';
 require_once __DIR__ . '/Extras/Security.php';
 
+if (session_status() == PHP_SESSION_NONE) session_start();
 $adminEmails = defined('ADMIN_EMAILS') ? array_map('trim', explode(',', ADMIN_EMAILS)) : [];
-if (!$login || empty($adminEmails) || !in_array($_SESSION['email'], $adminEmails)) {
+if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin'] || empty($adminEmails) || !in_array($_SESSION['email'] ?? '', $adminEmails)) {
   header("Location: index.php");
   exit;
 }
+
+require_once __DIR__ . '/Extras/header.php';
 
 $db = Database::getInstance();
 $products = [];
