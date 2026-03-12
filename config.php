@@ -33,29 +33,12 @@ define('STRIPE_ENABLED', false);
 // Admin: comma-separated emails that can access admin/inventory/shipments
 define('ADMIN_EMAILS', 'admin@ayitico.com');
 
-// Categories - loaded from database dynamically
-function getCategories() {
-    try {
-        $env = [];
-        $envFile = __DIR__ . '/.env';
-        if (file_exists($envFile)) {
-            $env = parse_ini_file($envFile);
-        }
-        $host = $env['DB_HOST'] ?? '10.10.1.38';
-        $name = $env['DB_NAME'] ?? 'ayitico_store';
-        $user = $env['DB_USER'] ?? 'ayitico_user';
-        $pass = $env['DB_PASS'] ?? 'Hfy74h5Vmty';
-        $port = $env['DB_PORT'] ?? 5432;
-
-        $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
-        $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-        $stmt = $pdo->query("SELECT name FROM categories ORDER BY name");
-        $cats = $stmt->fetchAll(PDO::FETCH_COLUMN);
-        return $cats ?: [];
-    } catch (Exception $e) {
-        return ['Solar', 'Phones', 'Electronics', 'Survival', 'Essentials'];
-    }
-}
-
-define('CATEGORIES', getCategories());
+// Categories - matching database
+define('CATEGORIES', [
+    'Solar',
+    'Phones', 
+    'Electronics',
+    'Survival',
+    'Essentials'
+]);
 ?>
