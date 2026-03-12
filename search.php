@@ -17,7 +17,7 @@ $results = [];
 
 if ($query !== '' && $db->getPDO()) {
   try {
-    $stmt = $db->getPDO()->prepare("SELECT id, name, price, category, description FROM products WHERE name LIKE ? OR description LIKE ? OR category LIKE ? ORDER BY name");
+    $stmt = $db->getPDO()->prepare("SELECT id, name, price, category, description, image FROM products WHERE name ILIKE ? OR description ILIKE ? OR category ILIKE ? ORDER BY name");
     $term = '%' . $query . '%';
     $stmt->execute([$term, $term, $term]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -25,33 +25,46 @@ if ($query !== '' && $db->getPDO()) {
     $error = "Search failed.";
   }
 }
-
-require_once __DIR__ . '/Extras/nav.php';
 ?>
 
 <main>
-  <h2>Search Products</h2>
-  <form method="get" action="search.php" class="search-form">
-    <input type="search" name="q" value="<?php echo htmlspecialchars($query); ?>" placeholder="Product name, category...">
-    <button type="submit" class="update-button">Search</button>
-  </form>
+  <h2>Search Results<?php if ($query !== ''): ?> for "<?php echo htmlspecialchars($query); ?>"<?php endif; ?></h2>
 
   <?php if (isset($error)): ?>
     <p class="alert"><?php echo htmlspecialchars($error); ?></p>
   <?php elseif ($query === ''): ?>
-    <p>Enter a search term above.</p>
+    <p>Enter a search term in the header search bar.</p>
   <?php elseif (empty($results)): ?>
     <p>No products found for "<?php echo htmlspecialchars($query); ?>".</p>
+    <p><a href="items.php">Browse all products</a></p>
   <?php else: ?>
-    <p><?php echo count($results); ?> result(s).</p>
-    <ul class="search-results">
-      <?php foreach ($results as $p): ?>
-        <li>
-          <a href="description.php?item=<?php echo (int)$p['id']; ?>"><?php echo htmlspecialchars($p['name']); ?></a>
-          — $<?php echo number_format((float)$p['price'], 2); ?> (<?php echo htmlspecialchars($p['category']); ?>)
-        </li>
+    <p class="search-result-count"><?php echo count($results); ?> result(s)</p>
+    <div class="items-grid">
+      <?php foreach ($results as $product): ?>
+        <div class="item-tile">
+          <div class="item-tile-image">
+          <?php
+          if (!empty($product['image'])) {
+            try {
+              $imgData = base64_encode($product['image']);
+              $finfo = new finfo(FILEINFO_MIME_TYPE);
+              $imgMime = $finfo->buffer($product['image']);
+              echo '<img src="data:'.$imgMime.';base64,'.$imgData.'" alt="'.htmlspecialchars($product['name']).'" />';
+            } catch (Exception $e) {
+              echo '<img src="images/placeholder.jpg" alt="" />';
+            }
+          } else {
+            echo '<img src="images/placeholder.jpg" alt="" />';
+          }
+          ?>
+          </div>
+          <p class="item-tile-badge">Ships to Haiti &amp; US</p>
+          <h4><?php echo htmlspecialchars($product['name']); ?></h4>
+          <p class="price">$<?php echo number_format((float)$product['price'], 2); ?></p>
+          <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">Add to Cart</a>
+        </div>
       <?php endforeach; ?>
-    </ul>
+    </div>
   <?php endif; ?>
 </main>
 

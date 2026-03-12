@@ -10,8 +10,6 @@ if ($login) {
   exit;
 }
 
-require_once __DIR__ . '/Extras/nav.php';
-
 $message = '';
 $messageClass = 'alert';
 

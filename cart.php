@@ -58,8 +58,6 @@ if (isset($_GET['status'])) {
   elseif ($s === 'updated') { $message = "Cart updated."; $messageClass = "alert-success"; }
   else { $message = "Something went wrong."; }
 }
-
-require_once __DIR__ . '/Extras/nav.php';
 ?>
 
 <main>

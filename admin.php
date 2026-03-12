@@ -48,8 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && Security::validateCSRFToken($_POST[
     $message = "Fill name, price, and category.";
   }
 }
-
-require_once __DIR__ . '/Extras/nav.php';
 ?>
 
 <main>

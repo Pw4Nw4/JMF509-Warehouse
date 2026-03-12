@@ -52,8 +52,6 @@ $products = [];
 try {
   $products = $db->fetchProducts(null, null);
 } catch (Exception $e) {}
-
-require_once __DIR__ . '/Extras/nav.php';
 ?>
 
 <main>

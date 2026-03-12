@@ -39,8 +39,31 @@ if (!isset($pageTitle)) {
   <script src="app.js" defer></script>
 </head>
 <body>
+<header class="site-header">
+  <div class="header-tier1">
+    <div class="header-logo">
+      <a href="index.php"><?php echo defined('BUSINESS_NAME') ? BUSINESS_NAME : 'JMF 509 Warehouse'; ?></a>
+    </div>
+    <div class="header-search">
+      <form method="get" action="search.php">
+        <input type="search" name="q" placeholder="Search JMF 509 Warehouse" aria-label="Search">
+        <button type="submit" aria-label="Search">Search</button>
+      </form>
+    </div>
+    <div class="header-right">
+      <?php if ($login): ?>
+        <a href="profile.php"><span>Hello, <?php echo $displayName; ?></span><span>Account</span></a>
+        <a href="orders.php"><span>Returns</span><span>& Orders</span></a>
+        <a href="cart.php" class="header-cart"><span id="cart-count" class="cart-badge">0</span> Cart</a>
+      <?php else: ?>
+        <a href="login.php"><span>Hello, Sign in</span><span>Account</span></a>
+        <a href="register.php"><span>New customer?</span><span>Register</span></a>
+        <a href="cart.php" class="header-cart"><span id="cart-count" class="cart-badge">0</span> Cart</a>
+      <?php endif; ?>
+    </div>
+  </div>
+  <div class="header-tier2">
+    <?php require_once __DIR__ . '/nav.php'; ?>
+  </div>
+</header>
 <div class="container">
-  <header>
-    <h1><?php echo defined('BUSINESS_NAME') ? BUSINESS_NAME : 'JMF 509 Warehouse'; ?></h1>
-    <p class="header-welcome">Welcome, <?php echo $displayName; ?>!</p>
-  </header>

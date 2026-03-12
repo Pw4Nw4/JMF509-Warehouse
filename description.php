@@ -79,8 +79,6 @@ if (isset($_GET['cart_add_status'])) {
   }
 }
 
-require_once __DIR__ . '/Extras/nav.php';
-
 function displayStars($rating) {
   $rating = max(0, min(5, (int)$rating));
   return str_repeat('★', $rating) . str_repeat('☆', 5 - $rating);

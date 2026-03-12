@@ -11,8 +11,6 @@ if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
 
 require_once __DIR__ . '/Extras/header.php';
 
-require_once __DIR__ . '/Extras/nav.php';
-
 $email = htmlspecialchars($_SESSION['email'] ?? '');
 $username = htmlspecialchars($_SESSION['username'] ?? '');
 ?>

@@ -2,7 +2,6 @@
 $pageTitle = "JMF 509 Warehouse - Home";
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/Extras/header.php';
-require_once __DIR__ . '/Extras/nav.php';
 require_once __DIR__ . '/Extras/database.php';
 require_once __DIR__ . '/Extras/Cache.php';
 
@@ -27,19 +26,29 @@ if ($featuredProducts === null && $pdo) {
 <section class="hero-banner">
   <div class="hero-text">
     <h2>Essential Goods &amp; Logistics for Haiti</h2>
-    <p>Solar products, electronics, survival supplies. Order online from the U.S. or Haiti—delivery or pickup.</p>
+    <p>Ships to Haiti &amp; US. Diaspora ordering — send to family.</p>
     <a href="items.php" class="hero-button">Shop Now</a>
   </div>
 </section>
 
 <main>
-  <section class="intro-content">
+  <?php if (!$login): ?>
+    <p class="login-prompt">Please <a href="register.php">register</a> or <a href="login.php">log in</a> to shop and place orders.</p>
+  <?php endif; ?>
+
+  <section class="shop-categories">
+    <h2>Shop by Category</h2>
+    <div class="category-tabs">
+      <a href="items.php?category=all">All</a>
+      <?php foreach (defined('CATEGORIES') ? CATEGORIES : [] as $cat): ?>
+        <a href="items.php?category=<?php echo urlencode($cat); ?>"><?php echo htmlspecialchars($cat); ?></a>
+      <?php endforeach; ?>
+    </div>
+  </section>
+
+  <section class="intro-content" id="mission">
     <h2>Our Mission</h2>
-    <p>JMF 509 Warehouse is an online store and logistics platform that sells essential goods—solar products, electronics, and survival items—for people in Haiti. Customers in the U.S. and Haiti can order products online and have them delivered or picked up.</p>
-    <p>We support <strong>diaspora ordering</strong>: send essentials to family in Haiti. Browse by category, add to cart, checkout, and pay online. We manage inventory and shipping so you don’t have to.</p>
-    <?php if (!$login): ?>
-      <p>Please <a href="register.php">register</a> or <a href="login.php">log in</a> to shop and place orders.</p>
-    <?php endif; ?>
+    <p>JMF 509 Warehouse is an online marketplace for essential goods—solar products, electronics, survival items—for Haiti. Order from the U.S. or Haiti; delivery or pickup. We support <strong>diaspora ordering</strong>: send essentials to family.</p>
   </section>
 
   <section class="featured-products">
@@ -52,6 +61,7 @@ if ($featuredProducts === null && $pdo) {
       <div class="items-grid">
         <?php foreach ($featuredProducts as $product): ?>
           <div class="item-tile">
+            <div class="item-tile-image">
             <?php
             if (!empty($product['image'])) {
               try {
@@ -66,9 +76,11 @@ if ($featuredProducts === null && $pdo) {
               echo '<img src="images/placeholder.jpg" alt="" />';
             }
             ?>
+            </div>
+            <p class="item-tile-badge">Ships to Haiti &amp; US</p>
             <h4><?php echo htmlspecialchars($product['name']); ?></h4>
             <p class="price">$<?php echo number_format((float)$product['price'], 2); ?></p>
-            <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">View Details</a>
+            <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">Add to Cart</a>
           </div>
         <?php endforeach; ?>
       </div>

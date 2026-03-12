@@ -5,14 +5,18 @@ function navIsActive($page, $currentPage) {
     return basename($page) === $currentPage ? ' class="active"' : '';
 }
 ?>
+<div class="nav-wrapper">
+<button type="button" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+  <span></span><span></span><span></span>
+</button>
 <nav>
   <ul>
-    <li><a href="index.php"<?php echo navIsActive('index.php', $currentPage); ?>>Home</a></li>
+    <li><a href="index.php"<?php echo navIsActive('index.php', $currentPage); ?>>All</a></li>
+    <li><a href="items.php"<?php echo navIsActive('items.php', $currentPage); ?>>Shop</a></li>
     <?php if ($login): ?>
-      <li><a href="items.php"<?php echo navIsActive('items.php', $currentPage); ?>>Shop</a></li>
-      <li><a href="search.php"<?php echo navIsActive('search.php', $currentPage); ?>>Search</a></li>
-      <li><a href="cart.php"<?php echo navIsActive('cart.php', $currentPage); ?>>Cart <span id="cart-count">0</span></a></li>
-      <li><a href="orders.php"<?php echo navIsActive('orders.php', $currentPage); ?>>Orders</a></li>
+      <?php foreach (defined('CATEGORIES') ? CATEGORIES : [] as $cat): ?>
+        <li><a href="items.php?category=<?php echo urlencode($cat); ?>"<?php echo (basename($_SERVER['SCRIPT_FILENAME']) === 'items.php' && isset($_GET['category']) && $_GET['category'] === $cat) ? ' class="active"' : ''; ?>><?php echo htmlspecialchars($cat); ?></a></li>
+      <?php endforeach; ?>
       <li><a href="profile.php"<?php echo navIsActive('profile.php', $currentPage); ?>>Profile</a></li>
       <?php
       $adminEmailsList = defined('ADMIN_EMAILS') ? array_map('trim', explode(',', ADMIN_EMAILS)) : [];
@@ -33,3 +37,4 @@ function navIsActive($page, $currentPage) {
     <?php endif; ?>
   </ul>
 </nav>
+</div>

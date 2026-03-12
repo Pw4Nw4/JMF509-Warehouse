@@ -19,8 +19,6 @@ if (!$db->getPDO()) {
   exit;
 }
 
-require_once __DIR__ . '/Extras/nav.php';
-
 $selectedCategory = isset($_GET['category']) ? trim($_GET['category']) : 'all';
 $categories = [];
 $productsLoadError = null;
@@ -48,12 +46,12 @@ if ($categories === null) {
 
 <main>
   <h2>Shop by Category</h2>
-  <p class="category-links">
+  <div class="category-tabs">
     <a href="items.php?category=all"<?php echo $selectedCategory === 'all' ? ' class="active"' : ''; ?>>All</a>
     <?php foreach (CATEGORIES as $cat): ?>
-      | <a href="items.php?category=<?php echo urlencode($cat); ?>"<?php echo $selectedCategory === $cat ? ' class="active"' : ''; ?>><?php echo htmlspecialchars($cat); ?></a>
+      <a href="items.php?category=<?php echo urlencode($cat); ?>"<?php echo $selectedCategory === $cat ? ' class="active"' : ''; ?>><?php echo htmlspecialchars($cat); ?></a>
     <?php endforeach; ?>
-  </p>
+  </div>
 
   <?php if ($productsLoadError): ?>
     <p class="alert"><?php echo htmlspecialchars($productsLoadError); ?></p>
@@ -65,6 +63,7 @@ if ($categories === null) {
       <div class="items-grid">
         <?php foreach ($productsInCategory as $product): ?>
           <div class="item-tile">
+            <div class="item-tile-image">
             <?php
             if (!empty($product['image'])) {
               try {
@@ -79,9 +78,11 @@ if ($categories === null) {
               echo '<img src="images/placeholder.jpg" alt="" />';
             }
             ?>
+            </div>
+            <p class="item-tile-badge">Ships to Haiti &amp; US</p>
             <h4><?php echo htmlspecialchars($product['name']); ?></h4>
             <p class="price">$<?php echo number_format((float)$product['price'], 2); ?></p>
-            <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">View Details</a>
+            <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">Add to Cart</a>
           </div>
         <?php endforeach; ?>
       </div>

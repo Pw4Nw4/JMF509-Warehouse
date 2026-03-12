@@ -41,8 +41,6 @@ try {
   $message = "Error loading inventory.";
 }
 
-require_once __DIR__ . '/Extras/nav.php';
-
 $totalProducts = count($products);
 $lowStock = count(array_filter($products, fn($p) => $p['current_stock'] > 0 && $p['current_stock'] < 10));
 $outOfStock = count(array_filter($products, fn($p) => (int)$p['current_stock'] === 0));
