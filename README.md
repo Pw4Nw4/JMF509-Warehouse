@@ -37,24 +37,14 @@ Online store and logistics platform for essential goods (solar products, electro
 3. **Config:** Copy `.env.example` to `.env` and set your database credentials. Optional: set `MAIL_ENABLED=1` and `MAIL_FROM_EMAIL` / `MAIL_FROM_NAME` to send real email (via PHP `mail()`); otherwise only logged.
 4. **Web server:** Point document root (or a vhost) to the `JMF509-Warehouse` folder so that `index.php` runs at the site root.
 
-### Option B: PostgreSQL + PostgREST + pgAdmin
+### Option B: Docker (site only)
 
-1. **Docker:** Generate secure credentials, then start the stack:
+1. **Docker:** Host the site (add DB later):
    ```bash
-   ./setup-docker-env.sh   # first time - creates .env with random passwords
-   docker compose up -d
+   docker compose up -d --build
    ```
-   Or use `./run-postgrest.sh` which runs setup automatically if needed.
-2. **PostgREST API** at `http://localhost:3000`:
-   - `GET /products` – list products
-   - `GET /products?id=eq.1` – single product
-   - `POST /orders` – create order
-   - etc. (auto-generated from schema)
-3. **pgAdmin** at `http://localhost:5050` (login: `admin@jmf509.com` / `admin`):
-   - Add server: host=`db`, user=`postgres`, password=`postgres`, database=`jmf509_warehouse`
-4. **Manual setup (no Docker):** Install PostgreSQL, run `schema_postgres.sql`, then [install PostgREST](https://postgrest.org/en/stable/install.html) and use `postgrest.conf`.
-
-5. **Coolify:** If the schema was not applied (e.g. "Is a directory" or "0 Relations" in PostgREST logs), delete the `pgdata` volume and redeploy to get a fresh database with the schema.
+   Or use `./run-postgrest.sh`. Site runs at `http://localhost:8080`.
+2. **Add DB later:** Copy `.env.example` to `.env` and set your database credentials (MySQL or PostgreSQL).
 
 ## Default admin
 
