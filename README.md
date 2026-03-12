@@ -54,6 +54,8 @@ Online store and logistics platform for essential goods (solar products, electro
    - Add server: host=`db`, user=`postgres`, password=`postgres`, database=`jmf509_warehouse`
 4. **Manual setup (no Docker):** Install PostgreSQL, run `schema_postgres.sql`, then [install PostgREST](https://postgrest.org/en/stable/install.html) and use `postgrest.conf`.
 
+5. **Coolify:** If the schema was not applied (e.g. "Is a directory" or "0 Relations" in PostgREST logs), delete the `pgdata` volume and redeploy to get a fresh database with the schema.
+
 ## Default admin
 
 - **Email:** `admin@jmf509.com`
