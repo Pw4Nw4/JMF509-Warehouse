@@ -10,19 +10,35 @@ class Database {
     private static $instance = null;
     private $pdo;
 
+    private function loadConfig() {
+        $env = [];
+        $envFile = __DIR__ . '/../.env';
+        if (file_exists($envFile) && is_readable($envFile)) {
+            $parsed = parse_ini_file($envFile);
+            if ($parsed) $env = $parsed;
+        }
+        return [
+            'DB_HOST' => getenv('DB_HOST') ?: ($env['DB_HOST'] ?? null),
+            'DB_NAME' => getenv('DB_NAME') ?: ($env['DB_NAME'] ?? null),
+            'DB_USER' => getenv('DB_USER') ?: ($env['DB_USER'] ?? null),
+            'DB_PASS' => getenv('DB_PASS') ?: ($env['DB_PASS'] ?? null),
+            'DB_PORT' => getenv('DB_PORT') ?: ($env['DB_PORT'] ?? 5432),
+        ];
+    }
+
     private function __construct() {
         try {
-            $envFile = __DIR__ . '/../.env';
-            if (!file_exists($envFile) || !is_readable($envFile)) {
-                throw new Exception('Environment file not found or not readable');
-            }
-            $env = parse_ini_file($envFile);
-            if ($env === false || !isset($env['DB_HOST'], $env['DB_NAME'], $env['DB_USER'], $env['DB_PASS'])) {
+            $env = $this->loadConfig();
+            $host = $env['DB_HOST'] ?? null;
+            $name = $env['DB_NAME'] ?? null;
+            $user = $env['DB_USER'] ?? null;
+            $pass = $env['DB_PASS'] ?? null;
+            if (!$host || !$name || !$user || $pass === null) {
                 throw new Exception('Missing required database configuration');
             }
-            $charset = $env['DB_CHARSET'] ?? 'utf8mb4';
-            $dsn = "mysql:host={$env['DB_HOST']};dbname={$env['DB_NAME']};charset=$charset";
-            $this->pdo = new PDO($dsn, $env['DB_USER'], $env['DB_PASS'], [
+            $port = $env['DB_PORT'] ?? 5432;
+            $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
+            $this->pdo = new PDO($dsn, $user, $pass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                 PDO::ATTR_EMULATE_PREPARES => false
