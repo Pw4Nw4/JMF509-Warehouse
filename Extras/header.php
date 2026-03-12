@@ -57,7 +57,6 @@ if (!isset($pageTitle)) {
         <a href="cart.php" class="header-cart"><span id="cart-count" class="cart-badge">0</span> Cart</a>
       <?php else: ?>
         <a href="login.php"><span>Hello, Sign in</span><span>Account</span></a>
-        <a href="register.php"><span>New customer?</span><span>Register</span></a>
         <a href="cart.php" class="header-cart"><span id="cart-count" class="cart-badge">0</span> Cart</a>
       <?php endif; ?>
     </div>

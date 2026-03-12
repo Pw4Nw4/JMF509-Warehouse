@@ -4,10 +4,6 @@ require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/Extras/database.php';
 
 if (session_status() == PHP_SESSION_NONE) session_start();
-if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
-  header("Location: index.php");
-  exit;
-}
 
 $itemId = isset($_GET['item']) ? filter_input(INPUT_GET, 'item', FILTER_VALIDATE_INT) : 0;
 if (!$itemId || $itemId <= 0) {
@@ -115,10 +111,14 @@ function displayStars($rating) {
       <div class="product-info">
         <p><strong>Price:</strong> $<?php echo number_format((float)$product['price'], 2); ?></p>
         <p><strong>Description:</strong><br><?php echo nl2br(htmlspecialchars($product['description'])); ?></p>
+        <?php if ($login): ?>
         <form action="add_to_cart.php" method="POST" style="margin-top: 1rem;">
           <input type="hidden" name="product_id" value="<?php echo (int)$product['id']; ?>">
           <button type="submit" name="add_to_cart_action" class="add-to-cart-button">Add to Cart</button>
         </form>
+        <?php else: ?>
+        <p style="margin-top: 1rem;"><a href="login.php" class="add-to-cart-button" style="display: inline-block; text-align: center; width: auto; padding: 12px 24px;">Sign in to Buy</a></p>
+        <?php endif; ?>
       </div>
     </div>
 
@@ -138,11 +138,12 @@ function displayStars($rating) {
         </ul>
       <?php endif; ?>
 
+      <?php if ($login): ?>
       <h3>Leave a Review</h3>
       <form method="post" action="description.php?item=<?php echo $itemId; ?>#reviews-section" class="review-form">
         <input type="hidden" name="review_submit_action" value="1">
         <div class="form-group">
-          <label for="rating">Rating (1–5):</label>
+          <label for="rating">Rating (1-5):</label>
           <select id="rating" name="rating" required>
             <option value="">Select</option>
             <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -156,6 +157,9 @@ function displayStars($rating) {
         </div>
         <button type="submit" class="update-button">Post Review</button>
       </form>
+      <?php else: ?>
+      <p><a href="login.php">Sign in</a> to leave a review.</p>
+      <?php endif; ?>
     </section>
   <?php endif; ?>
 </main>

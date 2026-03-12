@@ -16,12 +16,13 @@
           <li>Secure checkout</li>
         </ul>
       </div>
-      <div class="footer-col">
-        <h4>Diaspora Ordering</h4>
-        <ul>
-          <li>Send essentials to family in Haiti</li>
-          <li>Ships to Haiti & US</li>
-        </ul>
+      <div class="footer-col footer-newsletter">
+        <h4>Stay Updated</h4>
+        <p>Subscribe to get special offers and updates.</p>
+        <form method="post" action="subscribe.php" class="newsletter-form">
+          <input type="email" name="email" placeholder="Enter your email" required>
+          <button type="submit">Subscribe</button>
+        </form>
       </div>
     </div>
     <div class="footer-bottom">

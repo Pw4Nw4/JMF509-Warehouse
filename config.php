@@ -33,11 +33,22 @@ define('STRIPE_ENABLED', false);
 // Admin: comma-separated emails that can access admin/inventory/shipments
 define('ADMIN_EMAILS', 'admin@ayitico.com');
 
-// Categories for Haiti-focused store
+// Categories for universal marketplace
 define('CATEGORIES', [
-    'Solar products',
-    'Phones & electronics',
-    'Survival supplies',
-    'Essential household items'
+    'Electronics',
+    'Clothing & Fashion',
+    'Home & Garden',
+    'Beauty & Health',
+    'Sports & Outdoors',
+    'Toys & Games',
+    'Books & Media',
+    'Automotive',
+    'Food & Grocery',
+    'Baby & Kids',
+    'Office & School Supplies',
+    'Jewelry & Watches',
+    'Pet Supplies',
+    'Music & Instruments',
+    'Services & Digital'
 ]);
 ?>

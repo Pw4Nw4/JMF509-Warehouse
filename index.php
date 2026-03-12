@@ -25,15 +25,15 @@ if ($featuredProducts === null && $pdo) {
 
 <section class="hero-banner">
   <div class="hero-text">
-    <h2>Your Trusted Haitian Marketplace</h2>
-    <p>Quality products shipped to Haiti and the US. Connect with family through diaspora ordering.</p>
-    <a href="items.php" class="hero-button">Start Shopping</a>
+    <h2>Your Trusted Marketplace for Everything</h2>
+    <p>Shop thousands of products across 15 categories. Great prices, fast shipping, and quality guaranteed.</p>
+    <a href="items.php" class="hero-button">Shop Now</a>
   </div>
 </section>
 
 <main>
   <?php if (!$login): ?>
-    <p class="login-prompt">Please <a href="register.php">register</a> or <a href="login.php">log in</a> to shop and place orders.</p>
+    <p class="login-prompt">Please <a href="login.php">sign in</a> to shop and place orders.</p>
   <?php endif; ?>
 
   <section class="shop-categories">
@@ -48,8 +48,38 @@ if ($featuredProducts === null && $pdo) {
 
   <section class="intro-content" id="mission">
     <h2>Welcome to AyitiCo</h2>
-    <p>AyitiCo is your premier online marketplace for essential goods in Haiti. We offer solar products, electronics, survival supplies, and household essentials.</p>
-    <p>Whether you're ordering from the US or Haiti, we make it easy to send essentials to your family. Our <strong>diaspora ordering</strong> service lets you support loved ones back home with quality products delivered to their door.</p>
+    <p>AyitiCo is your premier online marketplace offering a wide variety of products across multiple categories. From electronics and fashion to home essentials and services, we have everything you need.</p>
+    <p>Shop with confidence knowing we offer <strong>secure payments</strong>, <strong>fast shipping</strong>, and <strong>quality products</strong> from trusted sellers.</p>
+  </section>
+
+  <section class="category-showcase">
+    <h2>Shop by Category</h2>
+    <div class="category-grid">
+      <?php
+      $category_icons = [
+        'Electronics' => '📱',
+        'Clothing & Fashion' => '👕',
+        'Home & Garden' => '🏠',
+        'Beauty & Health' => '💄',
+        'Sports & Outdoors' => '⚽',
+        'Toys & Games' => '🎮',
+        'Books & Media' => '📚',
+        'Automotive' => '🚗',
+        'Food & Grocery' => '🛒',
+        'Baby & Kids' => '👶',
+        'Office & School Supplies' => '✏️',
+        'Jewelry & Watches' => '💎',
+        'Pet Supplies' => '🐕',
+        'Music & Instruments' => '🎸',
+        'Services & Digital' => '💻'
+      ];
+      foreach (CATEGORIES as $cat): ?>
+        <a href="items.php?category=<?php echo urlencode($cat); ?>" class="category-card">
+          <span class="category-icon"><?php echo $category_icons[$cat] ?? '📦'; ?></span>
+          <span class="category-name"><?php echo htmlspecialchars($cat); ?></span>
+        </a>
+      <?php endforeach; ?>
+    </div>
   </section>
 
   <section class="why-choose">

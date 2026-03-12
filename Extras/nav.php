@@ -31,9 +31,6 @@ function navIsActive($page, $currentPage) {
           <button type="submit" class="nav-logout">Log Out</button>
         </form>
       </li>
-    <?php else: ?>
-      <li><a href="register.php"<?php echo navIsActive('register.php', $currentPage); ?>>Register</a></li>
-      <li><a href="login.php"<?php echo navIsActive('login.php', $currentPage); ?>>Log In</a></li>
     <?php endif; ?>
   </ul>
 </nav>
