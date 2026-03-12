@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "JMF 509 Warehouse - Log In";
+$pageTitle = "AyitiCo - Log In";
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/Extras/header.php';
 require_once __DIR__ . '/Extras/Security.php';

@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "JMF 509 Warehouse - Product";
+$pageTitle = "AyitiCo - Product";
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/Extras/database.php';
 
@@ -26,7 +26,7 @@ if ($pdo !== null) {
     $stmt->execute([$itemId]);
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
     if ($product) {
-      $pageTitle = "JMF 509 - " . htmlspecialchars($product['name']);
+      $pageTitle = "AyitiCo - " . htmlspecialchars($product['name']);
       $stmt = $pdo->prepare("SELECT r.*, u.username FROM reviews r LEFT JOIN users u ON r.user_email = u.email WHERE r.product_id = ? ORDER BY r.created_at DESC");
       $stmt->execute([$itemId]);
       $reviews = $stmt->fetchAll(PDO::FETCH_ASSOC);

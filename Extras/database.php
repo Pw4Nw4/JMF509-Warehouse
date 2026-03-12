@@ -37,7 +37,7 @@ class Database {
                 throw new Exception('Missing required database configuration');
             }
             $port = $env['DB_PORT'] ?? 5432;
-            $dsn = "pgsql:host={$host};port={$port};dbname={$name}";
+            $dsn = "pgsql:host={$host};port={$port};dbname={$name};sslmode=require";
             $this->pdo = new PDO($dsn, $user, $pass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

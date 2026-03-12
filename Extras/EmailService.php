@@ -21,8 +21,8 @@ class EmailService {
 
     private static function getFrom() {
         $env = self::getEnv();
-        $email = isset($env['MAIL_FROM_EMAIL']) ? trim($env['MAIL_FROM_EMAIL']) : 'noreply@jmf509.com';
-        $name = isset($env['MAIL_FROM_NAME']) ? trim($env['MAIL_FROM_NAME']) : 'JMF 509 Warehouse';
+        $email = isset($env['MAIL_FROM_EMAIL']) ? trim($env['MAIL_FROM_EMAIL']) : 'noreply@ayitico.com';
+        $name = isset($env['MAIL_FROM_NAME']) ? trim($env['MAIL_FROM_NAME']) : 'AyitiCo';
         return [$email, $name];
     }
 
@@ -45,14 +45,14 @@ class EmailService {
     }
 
     public static function sendWelcomeEmail($userEmail, $userName) {
-        $subject = 'Welcome to JMF 509 Warehouse';
+        $subject = 'Welcome to AyitiCo';
         $name = htmlspecialchars($userName, ENT_QUOTES, 'UTF-8');
-        $body = "<html><body><h2>Welcome, $name!</h2><p>Thank you for registering with JMF 509 Warehouse. You can now shop and place orders.</p></body></html>";
+        $body = "<html><body><h2>Welcome, $name!</h2><p>Thank you for registering with AyitiCo. You can now shop and place orders.</p></body></html>";
         return self::send($userEmail, $subject, $body);
     }
 
     public static function sendOrderConfirmation($userEmail, $orderId, $total, $destination = '') {
-        $subject = "Order Confirmation #$orderId - JMF 509 Warehouse";
+        $subject = "Order Confirmation #$orderId - AyitiCo";
         $totalFmt = htmlspecialchars(number_format((float)$total, 2), ENT_QUOTES, 'UTF-8');
         $body = "<html><body><h2>Order #$orderId received</h2><p>Total: \$$totalFmt</p><p>We'll process your order shortly.</p></body></html>";
         return self::send($userEmail, $subject, $body);

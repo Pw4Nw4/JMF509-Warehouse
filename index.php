@@ -1,5 +1,5 @@
 <?php
-$pageTitle = "JMF 509 Warehouse - Home";
+$pageTitle = "AyitiCo - Haitian Marketplace";
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/Extras/header.php';
 require_once __DIR__ . '/Extras/database.php';
@@ -25,9 +25,9 @@ if ($featuredProducts === null && $pdo) {
 
 <section class="hero-banner">
   <div class="hero-text">
-    <h2>Essential Goods &amp; Logistics for Haiti</h2>
-    <p>Ships to Haiti &amp; US. Diaspora ordering — send to family.</p>
-    <a href="items.php" class="hero-button">Shop Now</a>
+    <h2>Your Trusted Haitian Marketplace</h2>
+    <p>Quality products shipped to Haiti and the US. Connect with family through diaspora ordering.</p>
+    <a href="items.php" class="hero-button">Start Shopping</a>
   </div>
 </section>
 
@@ -37,7 +37,7 @@ if ($featuredProducts === null && $pdo) {
   <?php endif; ?>
 
   <section class="shop-categories">
-    <h2>Shop by Category</h2>
+    <h2>Browse Categories</h2>
     <div class="category-tabs">
       <a href="items.php?category=all">All</a>
       <?php foreach (defined('CATEGORIES') ? CATEGORIES : [] as $cat): ?>
@@ -47,8 +47,32 @@ if ($featuredProducts === null && $pdo) {
   </section>
 
   <section class="intro-content" id="mission">
-    <h2>Our Mission</h2>
-    <p>JMF 509 Warehouse is an online marketplace for essential goods—solar products, electronics, survival items—for Haiti. Order from the U.S. or Haiti; delivery or pickup. We support <strong>diaspora ordering</strong>: send essentials to family.</p>
+    <h2>Welcome to AyitiCo</h2>
+    <p>AyitiCo is your premier online marketplace for essential goods in Haiti. We offer solar products, electronics, survival supplies, and household essentials.</p>
+    <p>Whether you're ordering from the US or Haiti, we make it easy to send essentials to your family. Our <strong>diaspora ordering</strong> service lets you support loved ones back home with quality products delivered to their door.</p>
+  </section>
+
+  <section class="why-choose">
+    <div class="why-choose-card">
+      <div class="icon">🚚</div>
+      <h4>Fast Shipping</h4>
+      <p>Reliable delivery to Haiti and the US with tracking available.</p>
+    </div>
+    <div class="why-choose-card">
+      <div class="icon">💳</div>
+      <h4>Secure Payments</h4>
+      <p>Safe and secure checkout with multiple payment options.</p>
+    </div>
+    <div class="why-choose-card">
+      <div class="icon">🤝</div>
+      <h4>Diaspora Support</h4>
+      <p>Send essential goods to family in Haiti easily.</p>
+    </div>
+    <div class="why-choose-card">
+      <div class="icon">⭐</div>
+      <h4>Quality Products</h4>
+      <p>Curated selection of trusted brands and essentials.</p>
+    </div>
   </section>
 
   <section class="featured-products">
@@ -77,10 +101,10 @@ if ($featuredProducts === null && $pdo) {
             }
             ?>
             </div>
-            <p class="item-tile-badge">Ships to Haiti &amp; US</p>
+            <p class="item-tile-badge">Ships to Haiti & US</p>
             <h4><?php echo htmlspecialchars($product['name']); ?></h4>
             <p class="price">$<?php echo number_format((float)$product['price'], 2); ?></p>
-            <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">Add to Cart</a>
+            <a class="add-to-cart-button" href="description.php?item=<?php echo urlencode($product['id']); ?>">View Details</a>
           </div>
         <?php endforeach; ?>
       </div>

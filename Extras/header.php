@@ -25,7 +25,7 @@ $displayName = $login ? htmlspecialchars($_SESSION['email'] ?? 'User') : 'Guest'
 $currentPage = basename($_SERVER['SCRIPT_FILENAME']);
 
 if (!isset($pageTitle)) {
-    $pageTitle = defined('BUSINESS_NAME') ? BUSINESS_NAME : 'JMF 509 Warehouse';
+    $pageTitle = defined('BUSINESS_NAME') ? BUSINESS_NAME : 'AyitiCo';
 }
 ?>
 <!DOCTYPE html>
@@ -35,18 +35,18 @@ if (!isset($pageTitle)) {
   <title><?php echo htmlspecialchars($pageTitle); ?></title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="csrf-token" content="<?php require_once __DIR__ . '/Security.php'; echo Security::generateCSRFToken(); ?>">
-  <link rel="stylesheet" href="jmf509_styles.css">
+  <link rel="stylesheet" href="ayitico_styles.css">
   <script src="app.js" defer></script>
 </head>
 <body>
 <header class="site-header">
   <div class="header-tier1">
     <div class="header-logo">
-      <a href="index.php"><?php echo defined('BUSINESS_NAME') ? BUSINESS_NAME : 'JMF 509 Warehouse'; ?></a>
+      <a href="index.php"><?php echo defined('BUSINESS_NAME') ? BUSINESS_NAME : 'AyitiCo'; ?></a>
     </div>
     <div class="header-search">
       <form method="get" action="search.php">
-        <input type="search" name="q" placeholder="Search JMF 509 Warehouse" aria-label="Search">
+        <input type="search" name="q" placeholder="Search AyitiCo marketplace" aria-label="Search">
         <button type="submit" aria-label="Search">Search</button>
       </form>
     </div>
