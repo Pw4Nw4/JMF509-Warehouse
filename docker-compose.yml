@@ -1,0 +1,49 @@
+# JMF 509 Warehouse - PostgreSQL + PostgREST + pgAdmin
+# Run: ./setup-docker-env.sh  (first time) then  docker compose up -d
+# PostgREST API: http://localhost:3000
+# pgAdmin: http://localhost:5050
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-jmf509_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-jmf509_warehouse}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./schema_postgres.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-jmf509_user}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  postgrest:
+    image: postgrest/postgrest:v12.2.0
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGRST_DB_URI: postgres://${POSTGRES_USER:-jmf509_user}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB:-jmf509_warehouse}
+      PGRST_DB_SCHEMAS: public
+      PGRST_DB_ANON_ROLE: ${POSTGRES_USER:-jmf509_user}
+      PGRST_SERVER_PORT: 3000
+    ports:
+      - "3000:3000"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@jmf509.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:?Set PGADMIN_PASSWORD in .env}
+    ports:
+      - "5050:80"
+
+volumes:
+  pgdata:
