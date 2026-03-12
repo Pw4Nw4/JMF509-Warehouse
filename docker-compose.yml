@@ -1,10 +1,13 @@
 # JMF 509 Warehouse - Site only (add DB later)
 # Run: docker compose up -d
+# Uses webdevops/php-apache (includes pdo_pgsql, no build needed)
 
 services:
   web:
-    build: .
+    image: webdevops/php-apache:8.2
+    environment:
+      - WEB_DOCUMENT_ROOT=/app
     ports:
       - "8080:80"
     volumes:
-      - .:/var/www/html
+      - .:/app
